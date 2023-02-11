@@ -1,10 +1,13 @@
 name: First Workflow
+
+# on                    Event to trigger the workflow
+# workflow_dispatch     Event which triggers manually the workflow
 on: workflow_dispatch
 jobs:
-  first-job:
-    runs-on: ubuntu-latest
+  first-job:            # job_id    It can be anything
+    runs-on: ubuntu-latest    # runs-on   Job's runner
     steps:
       - name: Print greeting
-        run: echo "Hello World!"
+        run: echo "Hello World!"    # run   Run shell scripts or actions
       - name: Print goodbye
         run: echo "Done - bye!"
