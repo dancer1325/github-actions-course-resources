@@ -1,20 +1,24 @@
 name: Events Demo 1
+
+# on: [pull_request, workflow_dispatch, push]
+# Don't allow controlling, filtering each event individually
+
 on:
   pull_request:
-    types:
+    types:              # Specify activity types
       - opened
-    branches:
+    branches:           # Event filter
       - main # main
-      - 'dev-*' # dev-new dev-this-is-new
-      - 'feat/**' # feat/new feat/new/button
-  workflow_dispatch:
+      - 'dev-*'         # Regular expression.     dev-new dev-this-is-new
+      - 'feat/**'       # Regular expression.     feat/new feat/new/button
+  workflow_dispatch:    # ":"     Required to add
   push:
-    branches:
+    branches:           # Event filter
       - main # main
       - 'dev-*' # dev-new dev-this-is-new
       - 'feat/**' # feat/new feat/new/button
       # developer-1
-    paths-ignore:
+    paths-ignore:       # Event filter
       - '.github/workflows/*'
 jobs:
   deploy:
