@@ -1,21 +1,24 @@
 name: Deploy Project
+# on                    Event/s to trigger the workflow
+# push                  Event, each time which you push a commit or tag
+# workflow_dispatch     Event which triggers manually the workflow
 on: [push, workflow_dispatch]
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  test:       # job_id    It can be anything
+    runs-on: ubuntu-latest           # Runner for the job. This one already has got nodejs installed
     steps:
       - name: Get code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3     # Action, coming from the marketplace https://github.com/marketplace/actions/checkout
       - name: Install NodeJS
-        uses: actions/setup-node@v3
-        with:
+        uses: actions/setup-node@v3   # Action, coming from the marketplace https://github.com/marketplace/actions/setup-node-js-environment
+        with:                         # Map of input parameters by the action
           node-version: 18
       - name: Install dependencies
-        run: npm ci
+        run: npm ci                   # run   Run shell scripts
       - name: Run tests
-        run: npm test
-  deploy:
-    needs: test
+        run: npm test                 # run   Run shell scripts
+  deploy:   # job_id    It can be anything
+    needs: test       # Dependency between jobs, to run it sequentially
     runs-on: ubuntu-latest
     steps:
       - name: Get code

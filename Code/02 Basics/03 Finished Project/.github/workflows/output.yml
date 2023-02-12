@@ -1,8 +1,13 @@
 name: Output information
+
+# on                    Event to trigger the workflow
+# workflow_dispatch     Event which triggers manually the workflow
 on: workflow_dispatch
 jobs:
-  info:
-    runs-on: ubuntu-latest
+  info:                 # job_id    It can be anything
+    runs-on: ubuntu-latest      # runs-on   Job's runner
     steps:
       - name: Output GitHub context
-        run: echo "${{ toJSON(github) }}"
+        run: echo "${{ toJSON(github) }}"     # run   Run shell scripts
+        # toJSON          Built-in GitHub function https://docs.github.com/en/actions/learn-github-actions/expressions#tojson
+        # github    Context https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
