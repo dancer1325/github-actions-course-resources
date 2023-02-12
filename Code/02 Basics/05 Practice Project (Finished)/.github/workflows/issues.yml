@@ -1,4 +1,6 @@
 name: Handle issues
+
+# issues        Event when an issue is created or modified
 on: issues
 jobs:
   output-info:
@@ -6,3 +8,5 @@ jobs:
     steps:
       - name: Output event details
         run: echo "${{ toJSON(github.event) }}"
+        # github                Context https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
+        # github.event          Full event webhook payload
