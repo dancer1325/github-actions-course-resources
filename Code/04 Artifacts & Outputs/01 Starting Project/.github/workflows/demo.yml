@@ -1,7 +1,7 @@
 name: Deploy website
 on:
   push:
-    branches:
+    branches:             # Event filter
       - main
 jobs:
   test:
@@ -16,7 +16,7 @@ jobs:
       - name: Test code
         run: npm run test
   build:
-    needs: test
+    needs: test           # Dependency between jobs, to run it sequentially
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -24,9 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build website
-        run: npm run build
+        run: npm run build    # Command which produces job's artifacts. In this case, it's the "dist/"
   deploy:
-    needs: build
+    needs: build          # Dependency between jobs, to run it sequentially
     runs-on: ubuntu-latest
     steps:
       - name: Deploy

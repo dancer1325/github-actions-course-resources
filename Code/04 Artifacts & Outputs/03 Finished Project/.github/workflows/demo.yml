@@ -23,14 +23,14 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
-    outputs:
-      script-file: ${{ steps.publish.outputs.script-file }}
+    outputs:            # Outputs for a job. It's a context  https://docs.github.com/en/actions/learn-github-actions/contexts#steps-context
+      script-file: ${{ steps.publish.outputs.script-file }}       # Map of outputs -- key:value --
     steps:
       - name: Get code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
+        uses: actions/cache@v3    # GitHub action     https://github.com/actions/cache
+        with:                     # Map of input parameters by the action
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
@@ -38,27 +38,29 @@ jobs:
       - name: Build website
         run: npm run build
       - name: Publish JS filename
-        id: publish
-        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+        id: publish               # Step id     https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsid
+        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'   # Run shell scripts
+        # old way to indicate the output
+        # run: find dist/assets/*.js -type f -execdir echo '::set-output name=script-file::{}' ';'   # Run shell scripts
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-files
+        uses: actions/upload-artifact@v3    # GitHub action   https://github.com/actions/upload-artifact
+        with:                     # Map of input parameters by the action
+          name: dist-files        # Artifact name
           path: dist
-          # path: |
+          # path: |               # Retrieve multiple paths
           #   dist
           #   package.json
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Get build artifacts
-        uses: actions/download-artifact@v3
+      - name: Get build artifacts   # Get artifacts uploaded in the previous job
+        uses: actions/download-artifact@v3    # GitHub action   https://github.com/actions/download-artifact
         with:
-          name: dist-files
+          name: dist-files          # Artifact name, previously uploaded
       - name: Output contents
-        run: ls
+        run: ls                     # Just to check that the artifact's content, not the folder itself, is now in this runner / OS
       - name: Output filename
-        run: echo "${{ needs.build.outputs.script-file }}"
+        run: echo "${{ needs.build.outputs.script-file }}"      # Use needs context to get the outputs, depending on this job  https://docs.github.com/en/actions/learn-github-actions/contexts#needs-context
       - name: Deploy
         run: echo "Deploying..."
