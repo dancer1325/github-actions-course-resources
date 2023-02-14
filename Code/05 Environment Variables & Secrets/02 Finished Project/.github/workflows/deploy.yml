@@ -4,17 +4,18 @@ on:
     branches:
       - main
       - dev
+# Environment variable to the steps of all jobs     https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#env
 env:
-  MONGODB_DB_NAME: gha-demo
+  MONGODB_DB_NAME: gha-demo   # key: value      Environment variable used in the code
 jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
-    env:
-      MONGODB_CLUSTER_ADDRESS: cluster0.ntrwp.mongodb.net
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
-      PORT: 8080
+    env:        # Job's environment variables --> Available to all steps in the job https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idenv
+      MONGODB_CLUSTER_ADDRESS: cluster0.ntrwp.mongodb.net         # Environment variable used in the code
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}           # Environment variable used in the code
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}           # Environment variable used in the code
+      PORT: 8080                                                  # Environment variable used in the code
     steps:
       - name: Get Code
         uses: actions/checkout@v3
@@ -26,6 +27,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Run server
+        # Get access to environment variable's value, depend on runner / OS     https://docs.github.com/en/actions/learn-github-actions/variables#detecting-the-operating-system
         run: npm start & npx wait-on http://127.0.0.1:$PORT # requires MongoDB Atlas to accept requests from anywhere!
       - name: Run tests
         run: npm test
@@ -39,7 +41,11 @@ jobs:
       - name: Output information
         env:
           PORT: 3000
+        # Getting access to environment variables via
+        # 1. Depending on the runner          https://docs.github.com/en/actions/learn-github-actions/variables#detecting-the-operating-system
+        # 2. env context                      https://docs.github.com/en/actions/learn-github-actions/contexts#env-context
         run: |        
           echo "MONGODB_DB_NAME: $MONGODB_DB_NAME"
           echo "MONGODB_USERNAME: $MONGODB_USERNAME"
           echo "${{ env.PORT }}"
+          

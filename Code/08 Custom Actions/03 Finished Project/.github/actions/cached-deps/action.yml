@@ -25,4 +25,4 @@ runs:
       run: |
         npm ci
         echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
-      shell: bash
+      shell: bash     # Override the default shell  https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell

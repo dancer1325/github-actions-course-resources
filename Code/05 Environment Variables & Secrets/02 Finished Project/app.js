@@ -9,4 +9,5 @@ app.use(bodyParser.json());
 
 app.use(eventRoutes);
 
+// process.env            Environment variables
 app.listen(process.env.PORT);
