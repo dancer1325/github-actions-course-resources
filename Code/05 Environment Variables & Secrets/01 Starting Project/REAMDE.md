@@ -7,7 +7,7 @@
 
 ## How to run locally?
 * `npm install` 
-* `npm run dev`
+* `npm run start`
 
 ## Notes
 * It uses environment variables
