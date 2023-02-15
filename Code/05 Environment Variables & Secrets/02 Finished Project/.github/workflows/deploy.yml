@@ -9,10 +9,12 @@ env:
   MONGODB_DB_NAME: gha-demo   # key: value      Environment variable used in the code
 jobs:
   test:
-    environment: testing
+    environment: testing    # Specify the environment to use https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idenvironment
+    # https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#using-an-environment
     runs-on: ubuntu-latest
     env:        # Job's environment variables --> Available to all steps in the job https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idenv
       MONGODB_CLUSTER_ADDRESS: cluster0.ntrwp.mongodb.net         # Environment variable used in the code
+      # secrets   Context   https://docs.github.com/en/actions/learn-github-actions/contexts#example-usage-of-the-secrets-context
       MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}           # Environment variable used in the code
       MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}           # Environment variable used in the code
       PORT: 8080                                                  # Environment variable used in the code
