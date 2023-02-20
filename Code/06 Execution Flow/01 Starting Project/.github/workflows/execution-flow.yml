@@ -35,10 +35,10 @@ jobs:
       - name: Test code
         run: npm run test
       - name: Upload test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-report
-          path: test.json
+        uses: actions/upload-artifact@v3  # GitHub action   https://github.com/actions/upload-artifact
+        with:                   # Map of input parameters by the action
+          name: test-report     # Artifact name
+          path: test.json       # This path is specified by the vite configuration
   build:
     needs: test
     runs-on: ubuntu-latest
