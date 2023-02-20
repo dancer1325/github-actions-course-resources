@@ -13,10 +13,13 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: node_modules
+          path: node_modules        # cache all the whole node_modules folder
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
+        # cache-hit     https://github.com/actions/cache#outputs
+        # if cache was used --> new dependencies added --> needed to install  again
+        # if cache was not used --> not new dependencies added --> not needed to install  again
         run: npm ci
       - name: Lint code
         run: npm run lint
@@ -33,12 +36,19 @@ jobs:
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
+        # cache-hit     https://github.com/actions/cache#outputs
+        # if cache was used --> new dependencies added --> needed to install  again
+        # if cache was not used --> not new dependencies added --> not needed to install  again
         run: npm ci
       - name: Test code
-        id: run-tests
+        id: run-tests           # Give an id to be easier to reference it
         run: npm run test
       - name: Upload test report
-        if: failure() && steps.run-tests.outcome == 'failure'
+        if: failure() && steps.run-tests.outcome == 'failure'   # Condition to execute this step
+        # steps                         It's a Github context   https://docs.github.com/en/actions/learn-github-actions/contexts#steps-context
+        # steps.<step_id>.outcome       Result of a completed step before continue-on-error is applied
+        # ==            It's an operator used in expressions  https://docs.github.com/en/actions/learn-github-actions/expressions#operators
+        # failure()     If you don't add it, this step wouldn't be executed although previous one fails   https://docs.github.com/en/actions/learn-github-actions/expressions#failure
         uses: actions/upload-artifact@v3
         with:
           name: test-report
@@ -57,6 +67,9 @@ jobs:
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
+        # cache-hit     https://github.com/actions/cache#outputs
+        # if cache was used --> new dependencies added --> needed to install  again
+        # if cache was not used --> not new dependencies added --> not needed to install  again
         run: npm ci
       - name: Build website
         id: build-website
@@ -79,11 +92,13 @@ jobs:
       - name: Deploy
         run: echo "Deploying..."
   report:
+    # If you don't specify anything, by default jobs run parallel --> this job will be executed fast and it wouldn't realize that other jobs failed
+    # --> add needs, to run it sequentially
     needs: [lint, deploy]
-    if: failure()
+    if: failure()                 # Condition to execute this job
     runs-on: ubuntu-latest
     steps:
       - name: Output information
-        run: | 
+        run: |                              # Run several scripts, passed in several lines
           echo "Something went wrong"
           echo "${{ toJSON(github) }}"
