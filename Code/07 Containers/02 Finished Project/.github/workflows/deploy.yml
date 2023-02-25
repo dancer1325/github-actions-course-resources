@@ -11,20 +11,25 @@ jobs:
   test:
     environment: testing
     runs-on: ubuntu-latest
-    # container:
-    #   image: node:16
+    # container:          Run the job under this container, which runs on top of Runner Machine https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idcontainer
+    #   image: node:16    It will be picked from DockerHub repository
+    # If you specify 1 container image --> image can be avoided to specify
+    # container: node:16
+    # Not necessary, since we are going to use service containers
     env:
+      # Need to pass the configuration to connect to the service container
       MONGODB_CONNECTION_PROTOCOL: mongodb
+      #MONGODB_CLUSTER_ADDRESS: mongodb     # If you are using container (not service container)
       MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017
       MONGODB_USERNAME: root
       MONGODB_PASSWORD: example
       PORT: 8080
-    services:
-      mongodb:
-        image: mongo
-        ports:
+    services:     # Service containers  https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idservices
+      mongodb:    # <service_id>
+        image: mongo    # Image to use from DockerHub repository https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idservicesservice_idimage
+        ports:          # Ports to expose on the service container https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idservicesservice_idports
           - 27017:27017
-        env:
+        env:            # Map of environment variables  https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idservicesservice_idenv
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: example
     steps:
