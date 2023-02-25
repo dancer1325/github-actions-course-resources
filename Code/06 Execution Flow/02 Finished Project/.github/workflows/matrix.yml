@@ -2,25 +2,26 @@ name: Matrix Demo
 on: push
 jobs:
   build:
-    continue-on-error: true
-    strategy:
+    continue-on-error: true     # By default, if one combination matrix fails --> next still in execution will stop
+    strategy:         # Use a matrix strategy for running your jobs   https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategy
       matrix:
+        # key: ArrayOfValues
         node-version: [12, 14, 16]
         operating-system: [ubuntu-latest, windows-latest]
-        include:
+        include:     # Add standalone combinations https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategymatrixinclude
           - node-version: 18
             operating-system: ubuntu-latest
-        exclude:
+        exclude:    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstrategymatrixexclude
           - node-version: 12
             operating-system: windows-latest
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ${{ matrix.operating-system }}     # expression to use the variables declared in the matrix
     steps:
       - name: Get Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3     # Action, coming from the marketplace https://github.com/marketplace/actions/checkout
       - name: Install NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+        uses: actions/setup-node@v3   # NodeJs already preinstalled in the runs-on, but we want to specify it https://github.com/actions/setup-node
+        with:                         # Map of input parameters by the action
+          node-version: ${{ matrix.node-version }}    # expression to use the variables declared in the matrix
       - name: Install Dependencies
         run: npm ci
       - name: Build project
