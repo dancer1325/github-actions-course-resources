@@ -68,13 +68,14 @@ jobs:
           path: dist
   deploy:
     needs: build
-    uses: ./.github/workflows/reusable.yml
+    uses: ./.github/workflows/reusable.yml      # Way to invoke / reuse existing workflows    https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_iduses
     with:
-      artifact-name: dist-files
+      artifact-name: dist-files     # Specifying the reusable workflow's input
+    # Specify secrets, in case they are needed by the reusable workflow
     # secrets:
       # some-secret: ${{ secrets.some-secret }}
   print-deploy-result:
-    needs: deploy
+    needs: deploy     # Dependency between jobs, to run it sequentially -- since you need the output got from previous job --
     runs-on: ubuntu-latest
     steps:
       - name: Print deploy output

@@ -1,33 +1,36 @@
 name: Reusable Deploy
 on: 
-  workflow_call:
-    inputs:
-      artifact-name:
+  workflow_call:    # Required event to invoke the workflow from another workflow -- https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_call --
+    inputs:         # Inputs to pass to this reusable workflow -- https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_callinputs --
+      artifact-name:  # <input_id>  It can be anything
         description: The name of the deployable artifact files
-        required: false
+        required: false       # If it's indicated as true --> each time that it's not provided, invoking them --> workflow will fail
         default: dist
-        type: string
-    outputs:
-      result:
+        type: string      # Input's type https://docs.github.com/en/actions/learn-github-actions/contexts#inputs-context
+    outputs:        # Outputs returned back by the reusable workflow -- https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_calloutputs --
+      # Map of outputs
+      result:       # <output_id>
         description: The result of the deployment operation
-        value: ${{ jobs.deploy.outputs.outcome }}
-    # secrets:
+        value: ${{ jobs.deploy.outputs.outcome }}   # It's referred to job's output
+    # secrets:        https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_callsecrets
       # some-secret:
         # required: false
 jobs:
   deploy:
-    outputs:
-      outcome: ${{ steps.set-result.outputs.step-result }}
+    outputs:  # Outputs for a job. It's a context  https://docs.github.com/en/actions/learn-github-actions/contexts#steps-context
+      outcome: ${{ steps.set-result.outputs.step-result }}    # Map of outputs -- key:value --
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ inputs.artifact-name }}
+        uses: actions/download-artifact@v3    # GitHub action   https://github.com/actions/download-artifact
+        with:           # Map of input parameters by the action
+          #name: dist-files     # It wouldn't make it reusable, since it depends on hardcoded value
+          name: ${{ inputs.artifact-name }}     # Inputs context  https://docs.github.com/en/actions/learn-github-actions/contexts#inputs-context
       - name: List files
         run: ls
       - name: Output information
         run: echo "Deploying & uploading..."
       - name: Set result output
         id: set-result
+        # run: echo "::set-output name=step-result::success"     # Old way to set up as output
         run: echo "step-result=success" >> $GITHUB_OUTPUT
