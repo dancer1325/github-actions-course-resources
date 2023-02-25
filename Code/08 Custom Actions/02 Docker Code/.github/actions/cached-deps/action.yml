@@ -1,19 +1,33 @@
-name: 'Get & Cache Dependencies'
-description: 'Get the dependencies (via npm) and cache them.'
-inputs:
+name: 'Get & Cache Dependencies'      # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#name
+description: 'Get the dependencies (via npm) and cache them.'     # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#description
+inputs:     # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputs
   caching:
     description: 'Whether to cache dependencies or not.'
-    required: false
+    required: false     # If it's required and it's not passed to the custom action --> the execution will fail
     default: 'true'
-outputs:
+outputs:    # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputs-for-composite-actions
   used-cache:
     description: 'Whether the cache was used.'
     value: ${{ steps.install.outputs.cache }}
-runs:
-  using: 'composite'
+runs:       # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs
+  # Different depending on custom action type     https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-composite-actions
+  using: 'composite'        # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsusing-for-composite-actions
   steps:
+    # Now you can
+    # 1) Paste the steps defined in the workflow
+#    - name: Cache dependencies
+#      id: cache
+#      uses: actions/cache@v3
+#      with:
+#        path: node_modules
+#        key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+#    - name: Install dependencies
+#      if: steps.cache.outputs.cache-hit != 'true'
+#      run: npm ci
+#      shell: bash      # Required to specify because in the workflow it's the default
+    # 2)
     - name: Cache dependencies
-      if: inputs.caching == 'true'
+      if: inputs.caching == 'true'      # Use inputs in the custom action via Inputs context
       id: cache
       uses: actions/cache@v3
       with:
