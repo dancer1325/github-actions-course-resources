@@ -12,3 +12,4 @@ This is a super simple example repository!
 * 'label-issues-real.yml'
   * Workflow which assigns the bug label when the issue's title contains bug word
     * It could make whatever since we aren't restricting workflow's permissions
+    * GITHUB_TOKEN without restrictive permissions, just the default ones https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token

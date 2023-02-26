@@ -10,6 +10,8 @@ jobs:
       - name: Assign label
         # contains    Built-in GitHub function  https://docs.github.com/en/actions/learn-github-actions/expressions#contains
         if: contains(github.event.issue.title, 'bug')
+        # GITHUB_TOKEN  Manage and created by GitHub  https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+        # Their permissions are restricted by the workflow or job
         run: |
           curl -X POST \
           --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels \

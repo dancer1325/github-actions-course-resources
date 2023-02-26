@@ -8,4 +8,6 @@ This is a super simple example repository!
       * Define an environment variable, outside bash shell
 * 'label-issues-real.yml'
   * Workflow not vulnerable to not restrictive permissions
-    * Restrict scope permissions 
+    * Restrict scope permissions for
+      * job
+      * GITHUB_TOKEN
