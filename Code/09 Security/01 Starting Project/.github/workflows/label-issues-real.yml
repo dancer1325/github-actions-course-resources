@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Assign label
+        # contains    Built-in GitHub function  https://docs.github.com/en/actions/learn-github-actions/expressions#contains
         if: contains(github.event.issue.title, 'bug')
         run: |
           curl -X POST \

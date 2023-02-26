@@ -5,8 +5,8 @@ on:
       - opened
 jobs:
   assign-label:
-    permissions:
-      issues: write
+    permissions:      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idpermissions
+      issues: write   # Restrict permissions just to write right to issues scope
     runs-on: ubuntu-latest
     steps:
       - name: Assign label
