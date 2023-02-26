@@ -8,8 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Assign label
+        # Set up a step's environment variable    https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsenv
         env:
           TITLE: ${{ github.event.issue.title }}
+        # github    Context https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
+        # Next code is bash scripting
+        # |     Indicate that they are several lines of bash scripting
+        # Getting access to environment variables via
+        # 1. Depending on the runner          https://docs.github.com/en/actions/learn-github-actions/variables#detecting-the-operating-system
+        # 2. env context                      https://docs.github.com/en/actions/learn-github-actions/contexts#env-context
         run: |
           if [[ "$TITLE" == *"bug"* ]]; then
           echo "Issue is about a bug!"

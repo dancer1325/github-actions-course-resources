@@ -1,13 +1,16 @@
 name: Label Issues (Script Injection Example)
 on:
   issues:
-    types:
+    types:        # Specify activity types
       - opened
 jobs:
   assign-label:
     runs-on: ubuntu-latest
     steps:
       - name: Assign label
+        # github    Context https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
+        # Next code is bash scripting
+        # |     Indicate that they are several lines of bash scripting
         run: |
           issue_title="${{ github.event.issue.title }}"
           if [[ "$issue_title" == *"bug"* ]]; then
