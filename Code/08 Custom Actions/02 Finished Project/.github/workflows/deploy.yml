@@ -52,6 +52,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # For authenticate calls via OpenId Connect
+#    permissions:
+#      id-token: write
+#      contents: read
     steps:
       - name: Get code                # Remember to check out always the code in each job!!
         uses: actions/checkout@v3
@@ -62,20 +66,39 @@ jobs:
           path: ./dist
       - name: Output contents
         run: ls
+
+      # Ways to authenticate calls to AWS
+      # 1) Use secrets
       - name: Deploy site
         id: deploy
         # Either JS or Docker custom action can be used, since they make the same
         uses: ./.github/actions/deploy-s3-javascript    # Use a custom action, placed locally in this repo, relative from the root folder
         # uses: ./.github/actions/deploy-s3-docker    # Use a custom action, placed locally in this repo, relative from the root folder
-        env:          # Map of environment variables  https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsenv
+        env: # Map of environment variables  https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsenv
           # Next secrets are the access keys to authenticate calls done to AWS
           # secrets   Context   https://docs.github.com/en/actions/learn-github-actions/contexts#example-usage-of-the-secrets-context
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        with:                       # Map of input parameters by the action
+        with: # Map of input parameters by the action
           bucket: gha-custom-action-hosting
           dist-folder: ./dist
           # bucket-region: us-east-2
+      # 2) OpenId Connect
+#      - name: Get AWS permissions
+#        uses: aws-actions/configure-aws-credentials@v1
+#        with:
+#          role-to-assume: ARNForTheRoleCreated
+#          aws-region: IndicateRegionOfS3Created
+#      - name: Deploy site
+#        id: deploy
+#        # Either JS or Docker custom action can be used, since they make the same
+#        uses: ./.github/actions/deploy-s3-javascript    # Use a custom action, placed locally in this repo, relative from the root folder
+#        # uses: ./.github/actions/deploy-s3-docker    # Use a custom action, placed locally in this repo, relative from the root folder
+#        with:                       # Map of input parameters by the action
+#          bucket: gha-custom-action-hosting
+#          dist-folder: ./dist
+#          # bucket-region: us-east-2
+
       - name: Output information
         run: |
           echo "Live URL: ${{ steps.deploy.outputs.website-url }}"

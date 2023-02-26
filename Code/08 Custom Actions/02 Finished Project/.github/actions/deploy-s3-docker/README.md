@@ -9,11 +9,16 @@
   * Allow public access
   * Enable static website hosting
   * Add "PublicRead" policy
-* Create Access keys
-  * Required to upload to S3 bucket
-* Configure the secrets in the remote repository hosting this code, for the variables
-  * "AWS_ACCESS_KEY_ID"
-  * "AWS_SECRET_ACCESS_KEY"
+* Ways to authenticate calls to AWS
+  * Via Access keys
+    * Create Access keys
+      * Required to upload to S3 bucket
+    * Configure the secrets in the remote repository hosting this code, for the variables
+      * "AWS_ACCESS_KEY_ID"
+      * "AWS_SECRET_ACCESS_KEY"
+  * Via OpenId Connect
+    * Add the identity provider to AWS https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services#adding-the-identity-provider-to-aws
+    * 
 
 ## Note
 * S3 buckets generate website to check it's content
