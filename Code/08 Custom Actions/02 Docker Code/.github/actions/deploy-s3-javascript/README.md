@@ -9,7 +9,6 @@
   * Allow public access
   * Enable static website hosting
   * Add "PublicRead" policy
-  * 
 * Create Access keys
   * Required to upload to S3 bucket
 * Configure the secrets in the remote repository hosting this code, for the variables
