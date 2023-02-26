@@ -1,6 +1,7 @@
-name: 'Deploy to AWS S3'
-description: 'Deploy a static website via AWS S3.'
-inputs:
+name: 'Deploy to AWS S3'                                # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#name
+description: 'Deploy a static website via AWS S3.'      # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#description
+inputs:             # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputs
+  # Make it reusable the JS custom action
   bucket:
     description: 'The S3 bucket name.'
     required: true
@@ -11,9 +12,11 @@ inputs:
   dist-folder:
     description: 'The folder containing the deployable files.'
     required: true
-outputs:
+outputs:    # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#outputs-for-docker-container-and-javascript-actions
   website-url:
     description: 'The URL of the deployed website.'
-runs:
-  using: 'node16'
-  main: 'main.js'
+    # Don't declare the value, since it's done via JS code
+runs:             # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs
+  # Different depending on custom action type     https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-javascript-actions
+  using: 'node16'         # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsusing-for-javascript-actions
+  main: 'main.js'         # File with the JS code  -- https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runsmain

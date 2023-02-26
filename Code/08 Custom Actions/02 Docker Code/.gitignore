@@ -7,7 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Just ignore the "node modules" at top level, not for the nested, which it's required for JS custom actions
 /node_modules
+# Just ignore the "dist" at top level, not for the nested, which it's required for JS custom actions
 /dist
 dist-ssr
 *.local

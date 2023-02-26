@@ -20,7 +20,7 @@
       * "deploy-s3-docker"
         * docker custom action
       * "deploy-s3-javascript"
-        * js custom action
+        * js custom action -- "main.js" --
 * vite
   * Dependency which contains
     * dev server for your source files
